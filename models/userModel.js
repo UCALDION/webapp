@@ -43,4 +43,13 @@ exports.getAllUsers = (callback) => {
 };
 
 // Function to add a new user to the database
-exports.addUser = (name, email, callback
+exports.addUser = (name, email, callback) => {
+  const stmt = db.prepare('INSERT INTO users (name, email) VALUES (?, ?)');
+  stmt.run([name, email], function (err) {
+    if (err) {
+      return callback(err);
+    }
+    callback(null, { id: this.lastID, name, email });
+  });
+  stmt.finalize();
+};
