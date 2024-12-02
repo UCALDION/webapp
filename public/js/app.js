@@ -1,51 +1,46 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const userForm = document.getElementById('userForm');
-  const usersTable = document.getElementById('usersTable').getElementsByTagName('tbody')[0];
+const userForm = document.getElementById('userForm');
+const usersList = document.getElementById('usersList');
 
-  // Fetch users and update the table
-  function fetchUsers() {
-    fetch('/users')
-      .then(response => response.json())
-      .then(users => {
-        // Clear the table first
-        usersTable.innerHTML = '';
-
-        // Populate the table with user data
-        users.forEach(user => {
-          const row = usersTable.insertRow();
-          row.innerHTML = `
-            <td>${user.id}</td>
-            <td>${user.name}</td>
-            <td>${user.email}</td>
-          `;
-        });
-      })
-      .catch(error => console.error('Error fetching users:', error));
-  }
-
-  // Add user via form submission
-  userForm.addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent page reload
-
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-
-    // Send POST request to add a new user
-    fetch('/users', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email })
+// Fetch and display users
+function fetchUsers() {
+  fetch('/users')
+    .then(response => response.json())
+    .then(users => {
+      usersList.innerHTML = ''; // Clear the list
+      users.forEach(user => {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td>${user.id}</td><td>${user.name}</td><td>${user.description}</td>`;
+        usersList.appendChild(row);
+      });
     })
-      .then(response => response.json())
-      .then(user => {
-        // Clear the form
-        userForm.reset();
-        // Refresh the user list
-        fetchUsers();
-      })
-      .catch(error => console.error('Error adding user:', error));
-  });
+    .catch(error => console.error('Error fetching users:', error));
+}
 
-  // Initially fetch and display users
-  fetchUsers();
+// Add event listener for form submission
+userForm.addEventListener('submit', function(event) {
+  event.preventDefault(); // Prevent page reload
+
+  const name = document.getElementById('name').value;
+  const description = document.getElementById('description').value;
+
+  // Send POST request to add a new user
+  fetch('/users', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, description })
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(user => {
+    userForm.reset(); // Clear the form
+    fetchUsers(); // Refresh the user list
+  })
+  .catch(error => console.error('Error adding user:', error));
 });
+
+// Initial fetch of users
+fetchUsers();

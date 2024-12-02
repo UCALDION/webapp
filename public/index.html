@@ -12,13 +12,13 @@
 
     <!-- Form to add a new user -->
     <form id="userForm">
-      <label for="name">Name:</label>
+      <label for="name">Name of Item:</label>
       <input type="text" id="name" required>
-
-      <label for="email">Email:</label>
-      <input type="email" id="email" required>
-
-      <button type="submit">Add User</button>
+    
+      <label for="description">Description:</label>
+      <input type="text" id="description" required>
+    
+      <button type="submit">Add Item</button>
     </form>
 
     <!-- Display the list of users -->
@@ -27,12 +27,12 @@
       <thead>
         <tr>
           <th>ID</th>
-          <th>Name</th>
-          <th>Email</th>
+          <th>Name Item</th>
+          <th>Description</th>
         </tr>
       </thead>
-      <tbody>
-        <!-- User rows will be dynamically added here -->
+      <tbody id="usersList">
+        <!-- User rows will be populated here -->
       </tbody>
     </table>
   </div>

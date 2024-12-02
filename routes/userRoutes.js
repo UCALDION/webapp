@@ -6,6 +6,6 @@ const userController = require('../controllers/userController'); // Import contr
 router.get('/', userController.getAllUsers);
 
 // Route to add a new user
-router.post('/', userController.addUser);
+router.post('/', userController.addUser );
 
 module.exports = router;
